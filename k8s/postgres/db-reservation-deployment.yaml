@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-reservation
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-reservation
+  template:
+    metadata:
+      labels:
+        app: db-reservation
+    spec:
+      containers:
+        - name: db-reservation
+          image: postgres:latest
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: postgres
+            - name: POSTGRES_DB
+              value: reservations
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-reservation
+spec:
+  ports:
+    - port: 5432
+  selector:
+    app: db-reservation

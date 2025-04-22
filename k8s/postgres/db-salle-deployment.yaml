@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-salle
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-salle
+  template:
+    metadata:
+      labels:
+        app: db-salle
+    spec:
+      containers:
+        - name: db-salle
+          image: postgres:latest
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: postgres
+            - name: POSTGRES_DB
+              value: salles
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-salle
+spec:
+  ports:
+    - port: 5432
+  selector:
+    app: db-salle
